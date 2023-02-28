@@ -1,0 +1,63 @@
+namespace Timekeeping
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            DateTime startTime = DateTime.Parse("8:00 AM");
+            DateTime endTime = DateTime.Parse("5:00 PM");
+            TimeSpan lunchBreak = TimeSpan.FromHours(1);
+
+            Console.Write("Enter time using this format(H,MM,AM/PM)\n");
+            Console.Write("Time-in: ");
+            DateTime timeIn = DateTime.Parse(Console.ReadLine());
+
+            Console.Write("Time-out:");
+            DateTime timeOut = DateTime.Parse(Console.ReadLine());
+
+            TimeSpan totalHours = timeOut - timeIn;
+            TimeSpan regularHours = TimeSpan.Zero;
+            TimeSpan lateTime = timeIn - startTime;
+
+            if (timeOut < endTime)
+            {
+                TimeSpan overtime = timeOut - endTime;
+                totalHours -= overtime;
+                regularHours = endTime - startTime - lunchBreak;
+            }
+            else
+            {
+                regularHours = timeOut - timeIn - lunchBreak;
+            }
+
+            Console.WriteLine("Total hours worked: " + totalHours.ToString("h\\:mm"));
+            Console.WriteLine("Regular hours worked: " + regularHours.ToString("h\\:mm"));
+
+            if (lateTime > TimeSpan.Zero)
+            {
+                Console.WriteLine("Employee was late for work by: " + lateTime.ToString("h\\:mm"));
+            }
+            else
+            {
+                Console.WriteLine("Employee was not late for work.");
+            }
+
+            if (totalHours < (endTime - startTime))
+            {
+                TimeSpan undertime = (endTime - startTime) - totalHours;
+                Console.WriteLine("Employee worked undertime for: " + undertime.ToString("h\\:mm"));
+            }
+            else if (totalHours > (endTime - startTime))
+            {
+                TimeSpan overtime = totalHours - (endTime - startTime);
+                Console.WriteLine("Employee worked overtime for: " + overtime.ToString("h\\:mm"));
+            }
+            else
+            {
+                Console.WriteLine("Employee worked exact time working hours.");
+            }
+
+            Console.ReadLine();
+        }
+    }
+}
